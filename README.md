@@ -49,7 +49,7 @@ Elie una clave para el JWT_SECRET (o configura la clave por defecto: secret_key)
 
 En el archivo `package.json`, encontrarás los siguientes scripts útiles:
 
-- **`npm run dev`**: Inicia el servidor en modo de desarrollo, recargando automáticamente al detectar cambios.
+- **`npm run dev`**: Inicia el servidor en modo de desarrollo.
 - **`npm test`**: Ejecuta los tests incluídos en el repositorio.
 
 ## Estructura del Proyecto
