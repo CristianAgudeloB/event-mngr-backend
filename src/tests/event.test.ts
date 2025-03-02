@@ -13,6 +13,9 @@ describe('Event API', () => {
   const testUserEmail = 'test@example.com';
   const testUserPassword = 'password';
 
+  const createdUserIds: number[] = [];
+  const createdEventIds: number[] = [];
+
   beforeAll(async () => {
     const hashedPassword = await hashPassword(testUserPassword);
     const user = await prisma.user.create({
@@ -23,6 +26,7 @@ describe('Event API', () => {
       }
     });
     testUserId = user.id;
+    createdUserIds.push(testUserId);
     testAuthToken = jwt.sign({ id: testUserId }, process.env.JWT_SECRET as string, { expiresIn: '1h' });
 
     const event = await prisma.event.create({
@@ -35,11 +39,20 @@ describe('Event API', () => {
       }
     });
     testEventId = event.id;
+    createdEventIds.push(testEventId);
   });
 
   afterAll(async () => {
-    await prisma.event.deleteMany();
-    await prisma.user.deleteMany();
+    if (createdEventIds.length > 0) {
+      await prisma.event.deleteMany({
+        where: { id: { in: createdEventIds } }
+      });
+    }
+    if (createdUserIds.length > 0) {
+      await prisma.user.deleteMany({
+        where: { id: { in: createdUserIds } }
+      });
+    }
     await prisma.$disconnect();
   });
 
@@ -59,6 +72,8 @@ describe('Event API', () => {
       expect(response.body.user).toHaveProperty('id');
       expect(response.body.user.email).toBe(newUser.email);
       expect(response.body).toHaveProperty('token');
+
+      createdUserIds.push(response.body.user.id);
     });
 
     test('POST /register - Error al crear usuario duplicado', async () => {
@@ -73,7 +88,7 @@ describe('Event API', () => {
         .send(duplicateUser);
       
       expect(response.status).toBe(400);
-      expect(response.body).toHaveProperty('error', 'Email already exists');
+      expect(response.body).toHaveProperty('error', 'El email ya existe');
     });
 
     test('POST /login - Autenticación exitosa', async () => {
@@ -98,7 +113,7 @@ describe('Event API', () => {
         });
       
       expect(response.status).toBe(401);
-      expect(response.body).toHaveProperty('error', 'Invalid credentials');
+      expect(response.body).toHaveProperty('error', 'Credenciales incorrectas');
     });
   });
 
@@ -154,23 +169,24 @@ describe('Event API', () => {
     });
 
     test('PUT /users/:id - Error email duplicado al actualizar', async () => {
+      const secondUserEmail = `second_${Date.now()}@example.com`;
       const secondUser = await prisma.user.create({
         data: {
           name: "Second User",
-          email: "second@example.com",
+          email: secondUserEmail,
           password: await hashPassword('password')
         }
       });
 
+      createdUserIds.push(secondUser.id);
+
       const response = await request(app)
         .put(`/users/${testUserId}`)
         .set('Authorization', `Bearer ${testAuthToken}`)
-        .send({ email: "second@example.com" });
+        .send({ email: secondUserEmail });
       
       expect(response.status).toBe(400);
-      expect(response.body).toHaveProperty('error', 'Email already exists');
-
-      await prisma.user.delete({ where: { id: secondUser.id } });
+      expect(response.body).toHaveProperty('error', 'El email ya existe');
     });
 
     test('DELETE /users/:id - Eliminar usuario', async () => {
@@ -212,7 +228,8 @@ describe('Event API', () => {
         title: 'New Event',
         description: 'New Description',
         location: 'New Location',
-        date: new Date().toISOString()
+        date: new Date().toISOString(),
+        userId: testUserId
       };
     
       const response = await request(app)
@@ -224,6 +241,7 @@ describe('Event API', () => {
       expect(response.body).toHaveProperty('id');
       expect(response.body.userId).toBe(testUserId);
       tempEventId = response.body.id;
+      createdEventIds.push(tempEventId);
     });
 
     test('POST /events - Error al crear evento sin autenticación', async () => {

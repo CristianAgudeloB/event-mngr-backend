@@ -10,7 +10,6 @@ export const errorHandler: ErrorRequestHandler = (
   res: Response,
   next: NextFunction
 ): void => {
-  // En producción se podría ocultar el stack trace
   console.error(err.stack);
 
   const statusCode = err.status || 500;

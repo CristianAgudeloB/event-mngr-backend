@@ -245,10 +245,12 @@ components:
       properties:
         name:
           type: string
-          example: John Doe
+          pattern: "^[A-Za-zÁÉÍÓÚáéíóúÑñ\\s]+$"
+          example: José Pérez
         email:
           type: string
           format: email
+          pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
           example: user@example.com
         password:
           type: string
@@ -265,6 +267,7 @@ components:
         email:
           type: string
           format: email
+          pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
           example: user@example.com
         password:
           type: string
@@ -291,7 +294,7 @@ components:
           type: string
       example:
         id: 1
-        name: John Doe
+        name: José Pérez
         email: user@example.com
 
     UserUpdate:
@@ -299,9 +302,11 @@ components:
       properties:
         name:
           type: string
+          pattern: "^[A-Za-zÁÉÍÓÚáéíóúÑñ\\s]+$"
         email:
           type: string
           format: email
+          pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
         password:
           type: string
           format: password
