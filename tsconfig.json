@@ -1,0 +1,23 @@
+{
+  "module": "CommonJS",
+  "rootDir": "./",
+  "include": ["src", "tests"],
+  "outDir": "./dist",
+  "strict": true,
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "*": ["node_modules/*"]
+    }
+  }
+}
+
