@@ -23,7 +23,7 @@ Crea un archivo `.env` en la raíz del proyecto con las siguientes variables:
 ```
 DATABASE_URL="file:./dev.db"
 JWT_SECRET="una_clave_secreta_o_segura"
-PORT=3000
+PORT=5000
 ```
 Elie una clave para el JWT_SECRET (o configura la clave por defecto: secret_key)
 
@@ -43,7 +43,7 @@ Elie una clave para el JWT_SECRET (o configura la clave por defecto: secret_key)
    ```bash
    npm run dev
    ```
-   El servidor estará disponible por defecto en `http://localhost:3000`, a menos que hayas definido otro puerto en tu archivo `.env`.
+   El servidor estará disponible por defecto en `http://localhost:5000`, a menos que hayas definido otro puerto en tu archivo `.env`. Recomiendo dejarlo así, pues ya el frontend está configurado para comunicarse a esa dirección.
 
 ## Scripts Disponibles
 
