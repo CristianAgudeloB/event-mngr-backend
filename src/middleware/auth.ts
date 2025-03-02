@@ -5,18 +5,21 @@ export const authenticate = (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
-  const token = req.header('Authorization')?.replace('Bearer ', '');
+): void => {
+  const authHeader = req.header('Authorization') || '';
+  const token = authHeader.startsWith('Bearer ') ? authHeader.substring(7) : '';
 
   if (!token) {
-    return res.status(401).json({ error: 'Access denied. No token provided.' });
+    res.status(401).json({ error: 'Access denied. No token provided.' });
+    return;
   }
 
   try {
     const decoded = verifyToken(token);
+    // Asignar la información decodificada a req.user.
     (req as any).user = decoded;
     next();
-  } catch (error) {
+  } catch (error: unknown) {
     res.status(400).json({ error: 'Invalid token.' });
   }
 };

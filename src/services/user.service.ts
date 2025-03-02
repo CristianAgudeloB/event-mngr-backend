@@ -6,11 +6,11 @@ export class UserService {
 
   async createUser(userData: Omit<User, 'id'>): Promise<User> {
     if (!userData.name || !userData.email || !userData.password) {
-      throw new Error('Se requieren todos los campos');
+      throw new Error('Se requieren todos los campos: name, email y password');
     }
 
     const existingUser = await this.prisma.user.findUnique({
-      where: { email: userData.email }
+      where: { email: userData.email },
     });
 
     if (existingUser) {
@@ -22,14 +22,14 @@ export class UserService {
     return this.prisma.user.create({
       data: {
         ...userData,
-        password: hashedPassword
-      }
+        password: hashedPassword,
+      },
     });
   }
 
   async login(email: string, password: string): Promise<User> {
     const user = await this.prisma.user.findUnique({
-      where: { email }
+      where: { email },
     });
 
     if (!user) {
@@ -44,20 +44,20 @@ export class UserService {
     return user;
   }
 
-    async getUsers(): Promise<User[]> {
+  async getUsers(): Promise<User[]> {
     return this.prisma.user.findMany();
   }
 
   async getUserById(id: number): Promise<User | null> {
     return this.prisma.user.findUnique({
-      where: { id }
+      where: { id },
     });
   }
 
   async updateUser(id: number, userData: Partial<User>): Promise<User> {
     if (userData.email) {
       const existingUser = await this.prisma.user.findUnique({
-        where: { email: userData.email }
+        where: { email: userData.email },
       });
 
       if (existingUser && existingUser.id !== id) {
@@ -67,13 +67,13 @@ export class UserService {
 
     return this.prisma.user.update({
       where: { id },
-      data: userData
+      data: userData,
     });
   }
 
   async deleteUser(id: number): Promise<void> {
     await this.prisma.user.delete({
-      where: { id }
+      where: { id },
     });
   }
 }
