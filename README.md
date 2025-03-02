@@ -14,19 +14,18 @@ Este proyecto constituye el backend para el Gestor de Eventos, una aplicación q
 
 - **Node.js** (versión recomendada: LTS)
 - **npm** (incluido con Node.js)
-- **Base de Datos** (configurable con Prisma; por defecto, podrías usar PostgreSQL, MySQL o SQLite)
+- **Base de Datos** (configurable con Prisma; en este caso funciona bajo SQLite)
 
 ## Variables de Entorno
 
 Crea un archivo `.env` en la raíz del proyecto con las siguientes variables:
 
 ```
-DATABASE_URL="postgresql://usuario:contraseña@host:puerto/base_de_datos"
+DATABASE_URL="file:./dev.db"
 JWT_SECRET="una_clave_secreta_o_segura"
 PORT=3000
 ```
-
-Asegúrate de reemplazar los valores según tu configuración de base de datos y la clave secreta para JWT.
+Elie una clave para el JWT_SECRET (o configura la clave por defecto: secret_key)
 
 ## Instalación y Configuración
 
