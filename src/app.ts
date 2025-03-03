@@ -22,15 +22,6 @@ app.use(
   })
 );
 
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  res.status(err.status || 500).json({
-    error: {
-      message: err.message,
-      errors: err.errors
-    }
-  });
-});
-
 app.use(errorHandler);
 app.use('/', eventRoutes);
 app.use('/', userRoutes);

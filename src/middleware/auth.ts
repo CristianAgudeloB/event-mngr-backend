@@ -16,7 +16,6 @@ export const authenticate = (
 
   try {
     const decoded = verifyToken(token);
-    // Asignar la información decodificada a req.user.
     (req as any).user = decoded;
     next();
   } catch (error: unknown) {

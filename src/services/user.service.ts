@@ -1,8 +1,9 @@
-import { PrismaClient, User } from '@prisma/client';
+import { User } from '@prisma/client';
+import prisma from '../prisma';
 import { hashPassword, comparePassword } from '../utils/auth';
 
 export class UserService {
-  private prisma = new PrismaClient();
+  private prisma = prisma;
 
   async createUser(userData: Omit<User, 'id'>): Promise<User> {
     if (!userData.name || !userData.email || !userData.password) {

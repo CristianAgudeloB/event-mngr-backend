@@ -1,7 +1,8 @@
-import { PrismaClient, Event } from '@prisma/client';
+import { Event } from '@prisma/client';
+import prisma from '../prisma';
 
 export class EventService {
-  private prisma = new PrismaClient();
+  private prisma = prisma;
 
   async createEvent(eventData: Omit<Event, 'id'>): Promise<Event> {
     if (!eventData.title || !eventData.date || !eventData.userId) {
